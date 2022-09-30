@@ -1,161 +1,106 @@
 package guesser
 
-import java.util.*
-import kotlin.random.Random
-
 fun main(args: Array<String>) {
 
-    var komplekts: Array<Int> = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21)
-
-    var setsA: IntArray = IntArray(7)
-    var setsB: IntArray = IntArray(7)
-    var setsC: IntArray = IntArray(7)
-
-
-    for (i in komplekts.indices) {
-        komplekts.shuffle()
+    var deck: IntArray = IntArray(21)
+    for (i in deck.indices) {
+        deck[i] = i + 1
     }
 
-    for (skaitlis in komplekts) {
-        print(" $skaitlis ")
-    }
+    var setA: IntArray = IntArray(7)
+    var setB: IntArray = IntArray(7)
+    var setC: IntArray = IntArray(7)
 
-
-    var indeks: Int = 0
+    var setIndex: Int = 0
     var setCount: Int = 1
+    var turnCount: Int = 0
 
-    for (skaitlis in komplekts) {
+    shuffleDeck(deck)
+
+    splitDeck(deck, setCount, setA, setIndex, setB, setC)
 
 
-        when (setCount) {
+    while (turnCount < 3) {
+        izprinteSetus(setA, setB, setC)
+        println()
+        println("Memorize a number from three sets above and enter a, b or c in which set is your number.")
+        println()
+        var input: String = readLine()!!.toString().lowercase()
+
+        when (input) {
+            "a" -> {
+                deck = setB + setA + setC
+                turnCount++
+            }
+            "b" -> {
+                deck = setA + setB + setC
+                turnCount++
+            }
+            "c" -> {
+                deck = setA + setC + setC
+                turnCount++
+            }
+            else -> println("only use a,b or c")
+        }
+        splitDeck(deck, setCount, setA, setIndex, setB, setC)
+    }
+
+    println("Your number is ${deck[10]}")
+}
+
+private fun splitDeck(
+    deck: IntArray,
+    setCount: Int,
+    setA: IntArray,
+    setIndex: Int,
+    setB: IntArray,
+    setC: IntArray
+) {
+    var setCount1 = setCount
+    var setIndex1 = setIndex
+    for (number in deck) {
+        when (setCount1) {
             1 -> {
-                setsA[indeks] = skaitlis
-                setCount++
+                setA[setIndex1] = number
+                setCount1++
             }
             2 -> {
-                setsB[indeks] = skaitlis
-                setCount++
+                setB[setIndex1] = number
+                setCount1++
             }
             3 -> {
-                setsC[indeks] = skaitlis
-                setCount = 1
-                indeks++
+                setC[setIndex1] = number
+                setCount1 = 1
+                setIndex1++
             }
         }
     }
+}
 
-    izprinteSetus(setsA, setsB, setsC)
-    saliekKomplektu(pajautaSetu(), komplekts, setsB, setsA, setsC)
-    izprinteSetus(setsA, setsB, setsC)
-    saliekKomplektu(pajautaSetu(), komplekts, setsB, setsA, setsC)
-    izprinteSetus(setsA, setsB, setsC)
-    saliekKomplektu(pajautaSetu(), komplekts, setsB, setsA, setsC)
-    println(komplekts[10])
+private fun shuffleDeck(victim: IntArray) {
+    for (i in victim.indices) {
+        victim.shuffle()
+    }
 }
 
 private fun izprinteSetus(setsA: IntArray, setsB: IntArray, setsC: IntArray) {
     println()
     print("a - ")
-    for (skaitlis in setsA) {
-        print(" $skaitlis ")
-    }
+    printDeck(setsA)
     println()
     print("b - ")
-    for (skaitlis in setsB) {
-        print(" $skaitlis ")
-    }
+    printDeck(setsB)
     println()
     print("c - ")
-    for (skaitlis in setsC) {
-        print(" $skaitlis ")
+
+    printDeck(setsC)
+}
+
+private fun printDeck(deck: IntArray) {
+    for (number in deck) {
+        print(" $number ")
     }
 }
 
-private fun pajautaSetu() = readLine()!!.toString().lowercase()
+private fun askSet() = readLine()!!.toString().lowercase()
 
-private fun saliekKomplektu(
-    izvele: String,
-    komplekts: Array<Int>,
-    setsB: IntArray,
-    setsA: IntArray,
-    setsC: IntArray
-) {
-    when (izvele) {
-        "a" -> {
-            var y: Int = 0
-            for (i in komplekts.indices) {
-                when (i) {
-                    in 0..6 -> {
-                        komplekts[i] = setsB[y]
-                        y++
-                    }
-                    in 7..13 -> {
-                        if (y >= 6) {
-                            y = 0
-                        }
-                        komplekts[i] = setsA[y]
-                        y++
-                    }
-                    in 13..20 -> {
-                        if (y >= 6) {
-                            y = 0
-                        }
-                        komplekts[i] = setsC[y]
-                        y++
-                    }
-                }
-            }
-        }
-        "b" -> {
-            var y: Int = 0
-            for (i in komplekts.indices) {
-                when (i) {
-                    in 0..6 -> {
-                        komplekts[i] = setsA[y]
-                        y++
-                    }
-                    in 7..13 -> {
-                        if (y >= 6) {
-                            y = 0
-                        }
-                        komplekts[i] = setsB[y]
-                        y++
-                    }
-                    in 13..20 -> {
-                        if (y >= 6) {
-                            y = 0
-                        }
-                        komplekts[i] = setsC[y]
-                    }
-                }
-            }
-        }
-
-        "c" -> {
-            var y: Int = 0
-            for (i in komplekts.indices) {
-                when (i) {
-                    in 0..6 -> {
-                        komplekts[i] = setsA[y]
-                        y++
-                    }
-                    in 7..13 -> {
-                        if (y >= 6) {
-                            y = 0
-                        }
-                        komplekts[i] = setsC[y]
-                        y++
-                    }
-                    in 13..20 -> {
-                        if (y >= 6) {
-                            y = 0
-                        }
-                        komplekts[i] = setsB[y]
-                    }
-                }
-            }
-        }
-
-        else -> println("nederīga izvēle!")
-    }
-}
