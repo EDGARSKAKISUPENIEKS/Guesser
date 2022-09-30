@@ -1,5 +1,4 @@
 package guesser
-
 fun main(args: Array<String>) {
 
     var deck: IntArray = IntArray(21)
