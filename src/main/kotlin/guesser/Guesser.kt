@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
 
     shuffleDeck(deck)
 
-    splitDeck(deck, setCount, setA, setIndex, setB, setC)
+    splitDeck(deck, setCount, setIndex, setA, setB, setC)
 
 
     while (turnCount < 3) {
@@ -37,12 +37,12 @@ fun main(args: Array<String>) {
                 turnCount++
             }
             "c" -> {
-                deck = setA + setC + setC
+                deck = setA + setC + setB
                 turnCount++
             }
             else -> println("only use a,b or c")
         }
-        splitDeck(deck, setCount, setA, setIndex, setB, setC)
+        splitDeck(deck, setCount, setIndex, setA, setB, setC)
     }
 
     println("Your number is ${deck[10]}")
@@ -51,8 +51,8 @@ fun main(args: Array<String>) {
 private fun splitDeck(
     deck: IntArray,
     setCount: Int,
-    setA: IntArray,
     setIndex: Int,
+    setA: IntArray,
     setB: IntArray,
     setC: IntArray
 ) {
@@ -92,7 +92,6 @@ private fun izprinteSetus(setsA: IntArray, setsB: IntArray, setsC: IntArray) {
     printDeck(setsB)
     println()
     print("c - ")
-
     printDeck(setsC)
 }
 
